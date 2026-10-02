@@ -52,7 +52,7 @@
 
 <tr>
     <td>{{ course.course_code }}</td>
-    <td>{{ course.course_name }}</td>
+    <td>{{ course.course_name | safe }}</td>
     <td>{{ course.professor }}</td>
 </tr>
 

@@ -89,13 +89,13 @@ def login():
 
             if SQLI_LOGIN_ENABLED:
                 # 취약 코드
-                sql = f"""
-                    SELECT id, username, role
-                    FROM users
-                    WHERE username = '{username}'
-                    AND password = '{password}'
-                """
+                sql = (
+                    f"SELECT id, username, role "
+                    f"FROM users "
+                    f"WHERE username = '{username}' AND password = '{password}'"
+                )
 
+                print("[SQLI LAB QUERY]", sql)
                 cursor.execute(sql)
 
             else:
