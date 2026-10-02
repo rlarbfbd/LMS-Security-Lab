@@ -23,6 +23,9 @@ services:
       DB_NAME: lms
       DB_USER: lms_user
       DB_PASSWORD: lmspass
+
+      LAB_SQLI_LOGIN: "true"
+      LAB_SQLI_STUDENT_SEARCH: "true"
     depends_on:
       - db
     ports:

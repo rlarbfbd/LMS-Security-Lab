@@ -13,6 +13,13 @@ from functools import wraps
 app = Flask(__name__)
 app.secret_key = "lms-development-secret-key"
 
+SQLI_LOGIN_ENABLED = (
+    os.getenv("LAB_SQLI_LOGIN", "false").lower() == "true"
+)
+
+SQLI_STUDENT_SEARCH_ENABLED = (
+    os.getenv("LAB_SQLI_STUDENT_SEARCH", "false").lower() == "true"
+)
 
 def get_db():
     return pymysql.connect(
@@ -20,7 +27,7 @@ def get_db():
         user=os.getenv("DB_USER", "lms_user"),
         password=os.getenv("DB_PASSWORD", "lmspass"),
         database=os.getenv("DB_NAME", "lms"),
-	charset="utf8mb4",
+    charset="utf8mb4",
         cursorclass=pymysql.cursors.DictCursor
     )
 
@@ -80,17 +87,30 @@ def login():
     try:
         with conn.cursor() as cursor:
 
-            sql = """
-                SELECT id, username, role
-                FROM users
-                WHERE username = %s
-                AND password = %s
-            """
+            if SQLI_LOGIN_ENABLED:
+                # 취약 코드
+                sql = f"""
+                    SELECT id, username, role
+                    FROM users
+                    WHERE username = '{username}'
+                    AND password = '{password}'
+                """
 
-            cursor.execute(
-                sql,
-                (username, password)
-            )
+                cursor.execute(sql)
+
+            else:
+                # 안전한 코드
+                sql = """
+                    SELECT id, username, role
+                    FROM users
+                    WHERE username = %s
+                    AND password = %s
+                """
+
+                cursor.execute(
+                    sql,
+                    (username, password)
+                )
 
             user = cursor.fetchone()
 
@@ -169,6 +189,9 @@ def student_main():
 @app.route("/student/profile")
 @student_required
 def student_profile():
+    target_student_id = request.args.get("student_id")
+    if not target_student_id:
+        return redirect(url_for("student_profile", student_id=session["user_id"]))
 
     conn = get_db()
 
@@ -186,7 +209,7 @@ def student_profile():
                 FROM students
                 WHERE user_id = %s
                 """,
-                (session["user_id"],)
+                (target_student_id,)
             )
 
             student = cursor.fetchone()
@@ -203,6 +226,9 @@ def student_profile():
 @app.route("/student/grades")
 @student_required
 def student_grades():
+    target_student_id = request.args.get("student_id")
+    if not target_student_id:
+        return redirect(url_for("student_grades", student_id=session["user_id"]))
 
     conn = get_db()
 
@@ -227,7 +253,7 @@ def student_grades():
                 WHERE s.user_id = %s
                 ORDER BY c.course_code
                 """,
-                (session["user_id"],)
+                (target_student_id,)
             )
 
             grades = cursor.fetchall()
@@ -365,35 +391,51 @@ def admin_dashboard():
 @app.route("/admin/students")
 @admin_required
 def admin_students():
-
     keyword = request.args.get("keyword", "").strip()
 
     conn = get_db()
 
     try:
         with conn.cursor() as cursor:
-
             if keyword:
-                cursor.execute(
+                if SQLI_STUDENT_SEARCH_ENABLED:
+                    sql = f"""
+                        SELECT
+                            id,
+                            student_no,
+                            name,
+                            department,
+                            email
+                        FROM students
+                        WHERE student_no LIKE '%{keyword}%'
+                           OR name LIKE '%{keyword}%'
+                           OR department LIKE '%{keyword}%'
+                        ORDER BY student_no
                     """
-                    SELECT
-                        id,
-                        student_no,
-                        name,
-                        department,
-                        email
-                    FROM students
-                    WHERE student_no LIKE %s
-                       OR name LIKE %s
-                       OR department LIKE %s
-                    ORDER BY student_no
-                    """,
-                    (
-                        f"%{keyword}%",
-                        f"%{keyword}%",
-                        f"%{keyword}%"
+                    cursor.execute(sql)
+
+                else:
+                    cursor.execute(
+                        """
+                        SELECT
+                            id,
+                            student_no,
+                            name,
+                            department,
+                            email
+                        FROM students
+                        WHERE student_no LIKE %s
+                           OR name LIKE %s
+                           OR department LIKE %s
+                        ORDER BY student_no
+                        """,
+                        (
+                            f"%{keyword}%",
+                            f"%{keyword}%",
+                            f"%{keyword}%"
+                        )
                     )
-                )
+
             else:
                 cursor.execute(
                     """
