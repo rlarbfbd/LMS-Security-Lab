@@ -1,0 +1,55 @@
+{% extends "admin_base.html" %}
+
+{% block title %}
+학생 관리
+{% endblock %}
+
+{% block content %}
+
+<h2>학생 검색</h2>
+
+<form method="GET">
+    <input
+        type="text"
+        name="keyword"
+        value="{{ keyword }}"
+        placeholder="학번, 이름, 학과"
+    >
+
+    <button type="submit">
+        검색
+    </button>
+</form>
+
+<br>
+
+<table>
+
+    <tr>
+        <th>학번</th>
+        <th>이름</th>
+        <th>학과</th>
+        <th>이메일</th>
+        <th>조회</th>
+    </tr>
+
+    {% for student in students %}
+
+    <tr>
+        <td>{{ student.student_no }}</td>
+        <td>{{ student.name }}</td>
+        <td>{{ student.department }}</td>
+        <td>{{ student.email }}</td>
+
+        <td>
+            <a href="/admin/students/{{ student.id }}">
+                상세
+            </a>
+        </td>
+    </tr>
+
+    {% endfor %}
+
+</table>
+
+{% endblock %}

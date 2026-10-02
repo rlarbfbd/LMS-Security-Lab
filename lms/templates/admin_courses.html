@@ -1,0 +1,63 @@
+{% extends "admin_base.html" %}
+
+{% block content %}
+
+<h2>강의 관리</h2>
+
+<div class="card">
+
+    <h3>강의 등록</h3>
+
+    {% if error %}
+        <p>{{ error }}</p>
+    {% endif %}
+
+    <form method="POST">
+
+        <input
+            name="course_code"
+            placeholder="과목 코드"
+            required
+        >
+
+        <input
+            name="course_name"
+            placeholder="과목명"
+            required
+        >
+
+        <input
+            name="professor"
+            placeholder="담당 교수"
+            required
+        >
+
+        <button type="submit">
+            등록
+        </button>
+
+    </form>
+
+</div>
+
+<table>
+
+<tr>
+    <th>과목 코드</th>
+    <th>과목명</th>
+    <th>담당 교수</th>
+</tr>
+
+{% for course in courses %}
+
+<tr>
+    <td>{{ course.course_code }}</td>
+    <td>{{ course.course_name }}</td>
+    <td>{{ course.professor }}</td>
+</tr>
+
+{% endfor %}
+
+</table>
+
+{% endblock %}

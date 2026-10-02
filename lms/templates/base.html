@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+
+    <title>
+        {% block title %}LMS{% endblock %}
+    </title>
+
+    <style>
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+        }
+
+        header {
+            background: #1f2937;
+            color: white;
+            padding: 18px 30px;
+        }
+
+        header h2 {
+            margin: 0;
+        }
+
+        nav {
+            background: white;
+            padding: 15px 30px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        nav a {
+            margin-right: 20px;
+            text-decoration: none;
+            color: #333;
+        }
+
+        nav a:hover {
+            font-weight: bold;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1100px;
+            margin: 30px auto;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background: #f1f3f5;
+        }
+
+        input {
+            padding: 9px;
+            width: 300px;
+        }
+
+        button {
+            padding: 9px 15px;
+            cursor: pointer;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<header>
+
+    <h2>LMS</h2>
+
+</header>
+
+
+<nav>
+
+    <a href="/student">
+        메인
+    </a>
+
+    <a href="/student/profile">
+        내 정보
+    </a>
+
+    <a href="/student/grades">
+        성적 조회
+    </a>
+
+    <a href="/student/courses">
+        강의 검색
+    </a>
+
+    <a href="/student/notices">
+        공지사항
+    </a>
+
+    <a href="/logout">
+        로그아웃
+    </a>
+
+</nav>
+
+
+<div class="container">
+
+    {% block content %}
+    {% endblock %}
+
+</div>
+
+</body>
+
+</html>

@@ -1,0 +1,67 @@
+{% extends "admin_base.html" %}
+
+{% block content %}
+
+<h2>성적 관리</h2>
+
+<table>
+
+<tr>
+    <th>학생</th>
+    <th>과목</th>
+    <th>점수</th>
+    <th>등급</th>
+    <th>수정</th>
+</tr>
+
+{% for grade in grades %}
+
+<tr>
+
+<form method="POST">
+
+    <input
+        type="hidden"
+        name="enrollment_id"
+        value="{{ grade.enrollment_id }}"
+    >
+
+    <td>
+        {{ grade.student_no }} / {{ grade.name }}
+    </td>
+
+    <td>
+        {{ grade.course_name }}
+    </td>
+
+    <td>
+        <input
+            type="number"
+            name="score"
+            value="{{ grade.score }}"
+        >
+    </td>
+
+    <td>
+        <input
+            type="text"
+            name="letter_grade"
+            value="{{ grade.letter_grade }}"
+        >
+    </td>
+
+    <td>
+        <button type="submit">
+            저장
+        </button>
+    </td>
+
+</form>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+{% endblock %}

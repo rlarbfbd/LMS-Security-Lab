@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}
+학생 메인
+{% endblock %}
+
+
+{% block content %}
+
+<div class="card">
+
+    <h2>
+        {{ student.name }}님 환영합니다.
+    </h2>
+
+    <p>
+        학번: {{ student.student_no }}
+    </p>
+
+    <p>
+        학과: {{ student.department }}
+    </p>
+
+</div>
+
+
+<div class="card">
+
+    <h3>현재 수강 강의</h3>
+
+    <p>
+        {{ course_count }}개 강의를 수강하고 있습니다.
+    </p>
+
+</div>
+
+
+<div class="card">
+
+    <h3>최근 공지사항</h3>
+
+    {% for notice in notices %}
+
+        <p>
+            {{ notice.title }}
+        </p>
+
+    {% endfor %}
+
+</div>
+
+{% endblock %}

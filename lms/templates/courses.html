@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}
+강의 검색
+{% endblock %}
+
+
+{% block content %}
+
+<h2>강의 검색</h2>
+
+
+<form method="GET">
+
+    <input
+        type="text"
+        name="keyword"
+        value="{{ keyword }}"
+        placeholder="과목명, 교수명, 과목코드 검색"
+    >
+
+    <button type="submit">
+        검색
+    </button>
+
+</form>
+
+
+<br>
+
+
+<table>
+
+    <thead>
+
+        <tr>
+
+            <th>과목 코드</th>
+
+            <th>과목명</th>
+
+            <th>담당 교수</th>
+
+        </tr>
+
+    </thead>
+
+
+    <tbody>
+
+        {% for course in courses %}
+
+        <tr>
+
+            <td>
+                {{ course.course_code }}
+            </td>
+
+            <td>
+                {{ course.course_name }}
+            </td>
+
+            <td>
+                {{ course.professor }}
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+    </tbody>
+
+</table>
+
+{% endblock %}

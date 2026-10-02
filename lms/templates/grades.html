@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}
+성적 조회
+{% endblock %}
+
+
+{% block content %}
+
+<h2>성적 조회</h2>
+
+<table>
+
+    <thead>
+
+        <tr>
+            <th>과목 코드</th>
+            <th>과목명</th>
+            <th>교수</th>
+            <th>점수</th>
+            <th>등급</th>
+        </tr>
+
+    </thead>
+
+    <tbody>
+
+        {% for grade in grades %}
+
+        <tr>
+
+            <td>
+                {{ grade.course_code }}
+            </td>
+
+            <td>
+                {{ grade.course_name }}
+            </td>
+
+            <td>
+                {{ grade.professor }}
+            </td>
+
+            <td>
+                {{ grade.score }}
+            </td>
+
+            <td>
+                {{ grade.letter_grade }}
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+    </tbody>
+
+</table>
+
+{% endblock %}
